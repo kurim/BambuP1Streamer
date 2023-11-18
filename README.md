@@ -12,8 +12,8 @@ https://github.com/AlexxIT/go2rtc does most of the work.
 
 Bambu Studio Proprietary Plugin Library
 ```
-wget https://public-cdn.bambulab.com/upgrade/studio/plugins/01.04.00.15/linux_01.04.00.15.zip
-unzip linux_01.04.00.15.zip
+wget https://public-cdn.bambulab.com/upgrade/studio/plugins/01.07.01.04/linux_01.07.01.04.zip
+unzip linux_01.07.01.04.zip
 ```
 
 Go2Rtc
@@ -31,7 +31,7 @@ scripts/build_all.sh : build it all
 --> scripts/build_container.sh : builds the container to run
 
 
-scripts/run_container.sh : starts the container in podman
+scripts/run_container.sh : starts the container
 ```
 
 # BUILD

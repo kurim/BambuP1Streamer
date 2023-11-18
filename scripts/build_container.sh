@@ -1,3 +1,5 @@
 #!/bin/sh
 
-podman build -t bambu_p1_streamer .
+container=$1
+
+$container build -t bambu_p1_streamer .
