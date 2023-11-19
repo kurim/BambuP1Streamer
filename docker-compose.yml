@@ -1,0 +1,55 @@
+version: "3.4"
+
+networks:
+  wireguard:
+    name: wireguard
+    external: true
+  default:
+    driver: bridge
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: wireguard
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "8554:8554"
+    env_file:
+      - ip.env
+    environment:
+      - VPN_SERVICE_PROVIDER=custom
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PUBLIC_KEY=
+      - WIREGUARD_PRIVATE_KEY=
+      - WIREGUARD_PRESHARED_KEY=
+      - WIREGUARD_ADDRESSES=
+      - VPN_ENDPOINT_IP=
+      - VPN_ENDPOINT_PORT=
+      - FIREWALL=off
+      - FIREWALL_OUTBOUND_SUBNETS=192.168.1.0/24
+      - DOT=off
+      - HEALTH_TARGET_ADDRESS=1.1.1.1:80
+    networks:
+      - wireguard
+      - default
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  p1stream:
+    container_name: p1stream
+    image: "kur1m/p1stream:1.0.1"
+    restart: unless-stopped
+    privileged: true
+    network_mode: "service:gluetun"
+    environment:
+      PRINTER_ADDRESS: 
+      PRINTER_ACCESS_CODE: 
+      UI_USERNAME: 
+      UI_PASS: 
+      RTSP_USERNAME: 
+      RTSP_PASSWORD: 
+    labels:   
+      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.monitor-only=true

@@ -4,3 +4,9 @@ log:
   level: debug
 api:
   origin: "*"
+  username: "${UI_USERNAME}"
+  password: "${UI_PASS}"
+rtsp:
+  listen: ":8554"
+  username: "${RTSP_USERNAME}"
+  password: "${RTSP_PASSWORD}"

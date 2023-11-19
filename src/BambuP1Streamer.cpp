@@ -166,18 +166,19 @@ int main(int argc, char* argv[]){
 	fprintf(stderr, "  printAddress: %s\n", printerAddress);
 	fprintf(stderr, "  accessCode: %s\n\n", accessCode);
 
-
 	char camera_url[256];
-	
+
 	snprintf(camera_url, 256, "bambu:///local/%s.?port=6000&user=bblp&passwd=%s", printerAddress, accessCode);
+
 
 	module = dlopen(bambuLibPath, RTLD_LAZY);
 	if (module == NULL)
-    {
-        fprintf(stderr, "Failed loading libBambuSource.so at path %s\n", bambuLibPath);
+	{
+        fprintf(stderr, "%s\n", dlerror());
         return -1;
-    }
-	GET_FUNC(Bambu_Init);
+	}
+
+    GET_FUNC(Bambu_Init);
     GET_FUNC(Bambu_Deinit);
     GET_FUNC(Bambu_Create);
     GET_FUNC(Bambu_Destroy);
