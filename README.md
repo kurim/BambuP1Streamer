@@ -2,15 +2,10 @@
 
 Only tested on a P1S.
 
-Built and tested on Ubuntu Latest / amd64.
-ARM 64 is not supported due Bambu Library don't work.
-
-Based on: https://github.com/slynn1324/BambuP1Streamer
-and https://github.com/hisptoot/BambuSource2Raw.  
+Based on go2rtc Docker
 
 # DEPENDENCIES
 
-* [Bambu Studio Proprietary Plugin Library](https://public-cdn.bambulab.com/upgrade/studio/plugins/01.05.00.10/linux_01.05.00.10.zip)
 * [Go2Rtc](https://github.com/AlexxIT/go2rtc/)
 * wget unzip curl ffmpeg
 
@@ -52,7 +47,7 @@ environment:
   PRINTER_ADDRESS: 
   PRINTER_ACCESS_CODE: 
   UI_USERNAME: 
-  UI_PASS: 
+  UI_PASSWORD: 
   RTSP_USERNAME: 
   RTSP_PASSWORD: 
 ```
@@ -61,14 +56,14 @@ environment:
 # ACCESS
 ###Index Page (only the MJPEG parts will work)
 ```
-http://<host>:1984/links.html?src=p1s
+http://<host>:1984/links.html?src=p1
 ```
 
 ### MJPEG Streamurl
 ```
-http://<host>:1984/api/stream.mjpeg?src=p1s
+http://<host>:1984/api/stream.mjpeg?src=p1
 ```
 ### RTSP Streamurl
 ```
-rtsp://<user>:<pw>@<host>:8554/p1s
+rtsp://<user>:<pw>@<host>:8554/p1
 ```

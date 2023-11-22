@@ -1,44 +1,25 @@
-# Stage 1: Build-Stage
-FROM docker.io/gcc:12 AS builder
-
-# Workdir for Build Stage
-WORKDIR /work
-
-# install wget and unzip
-RUN apt-get update && apt-get install -y wget unzip
-
-# Download needed content
-RUN wget -q https://public-cdn.bambulab.com/upgrade/studio/plugins/01.05.00.10/linux_01.05.00.10.zip
-RUN unzip linux_01.05.00.10.zip -d /work/build
-
-# Copy source to Build-Stage
-COPY src/BambuP1Streamer.cpp src/BambuTunnel.h /work/src/
-
-# Compile C++
-RUN gcc /work/src/BambuP1Streamer.cpp -o /work/build/BambuP1Streamer
-
 # Main-Image
-FROM ubuntu:latest
+FROM alexxit/go2rtc:latest
 
-RUN apt-get update && apt-get install -y wget curl ffmpeg
-RUN apt-get upgrade -y
+# Update packages and install necessary dependencies
+RUN apk update && apk add wget curl ffmpeg
 
 RUN mkdir -p /app
-COPY go2rtc.yaml /app/
-COPY --from=builder /work/build/ /app/
+COPY go2rtc.yaml p1.py p1-test.py /app/
 
-# Download latest version of go2rtc based on arch
-ARG TARGETARCH
-
-RUN VER=$(curl --silent -qI https://github.com/AlexxIT/go2rtc/releases/latest | awk -F '/' '/^location/ {print  substr($NF, 1, length($NF)-1)}') ;\
-    wget -P /app -q https://github.com/AlexxIT/go2rtc/releases/download/$VER/go2rtc_linux_amd64 ; \
-    mv /app/go2rtc_linux_amd64 /app/go2rtc ; \
-    chmod a+x /app/go2rtc
-
-WORKDIR /app
-
+# Set environment variables if needed
 ENV PRINTER_ADDRESS=
 ENV PRINTER_ACCESS_CODE=
+ENV UI_USERNAME=
+ENV UI_PASSWORD=
+ENV RTSP_USERNAME=
+ENV RTSP_PASSWORD=
+
+# Expose necessary ports
+EXPOSE 8554
+
+# Set working directory
+WORKDIR /app
 
 EXPOSE 8554
-CMD ["./go2rtc"]
+CMD ["go2rtc"]

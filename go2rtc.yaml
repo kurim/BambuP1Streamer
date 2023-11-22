@@ -1,11 +1,14 @@
 streams:
-   p1s: "exec:./BambuP1Streamer ./libBambuSource.so ${PRINTER_ADDRESS} ${PRINTER_ACCESS_CODE}"
+   p1s: 
+      - exec:python3 ./p1.py -a ${PRINTER_ACCESS_CODE} -i ${PRINTER_ADDRESS}
+   p1s-test:
+      - exec:python3 ./p1-test.py -a ${PRINTER_ACCESS_CODE} -i ${PRINTER_ADDRESS}
 log:
   level: debug
 api:
   origin: "*"
   username: "${UI_USERNAME}"
-  password: "${UI_PASS}"
+  password: "${UI_PASSWORD}"
 rtsp:
   listen: ":8554"
   username: "${RTSP_USERNAME}"

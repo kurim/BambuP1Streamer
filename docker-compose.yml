@@ -50,6 +50,3 @@ services:
       UI_PASS: 
       RTSP_USERNAME: 
       RTSP_PASSWORD: 
-    labels:   
-      - com.centurylinklabs.watchtower.enable=true
-      - com.centurylinklabs.watchtower.monitor-only=true
