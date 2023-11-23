@@ -1,0 +1,13 @@
+streams:
+   p1s: 
+      - exec:python3 ./p1.py -a ${PRINTER_ACCESS_CODE} -i ${PRINTER_ADDRESS}
+log:
+  level: info
+api:
+  origin: "*"
+  username: "${UI_USERNAME}"
+  password: "${UI_PASSWORD}"
+rtsp:
+  listen: ":8554"
+  username: "${RTSP_USERNAME}"
+  password: "${RTSP_PASSWORD}"

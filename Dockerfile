@@ -2,10 +2,10 @@
 FROM alexxit/go2rtc:latest
 
 # Update packages and install necessary dependencies
-RUN apk update && apk add wget curl ffmpeg
+RUN apk update && apk add wget curl
 
 RUN mkdir -p /app
-COPY go2rtc.yaml p1.py p1-test.py /app/
+COPY go2rtc.yaml p1.py /app/
 
 # Set environment variables if needed
 ENV PRINTER_ADDRESS=
@@ -21,5 +21,9 @@ EXPOSE 8554
 # Set working directory
 WORKDIR /app
 
-EXPOSE 8554
+LABEL \
+  io.hass.version="VERSION" \
+  io.hass.type="addon" \
+  io.hass.arch="aarch64|amd64"
+
 CMD ["go2rtc"]

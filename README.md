@@ -7,24 +7,28 @@ Based on go2rtc Docker
 # DEPENDENCIES
 
 * [Go2Rtc](https://github.com/AlexxIT/go2rtc/)
-* wget unzip curl ffmpeg
+* wget unzip curl
+
+## Info
+
+Folder /ha Contains Homeassistant Docker Config
 
 # BUILD
 
 ## build container
 ```
-docker build -t bambu_p1_streamer .
+docker build -t p1stream .
 ```
 
 # RUN
 
 ## Docker (local)
 ```
-docker run -d --name bambu_p1_streamer -p 1984:1984 -p 8554:8554 \
+docker run -d --name p1stream -p 1984:1984 -p 8554:8554 \
 -e PRINTER_ADDRESS=<PrinterIP> -e PRINTER_ACCESS_CODE=12345678 \
 -e UI_USERNAME=<UI_USERNAME> -e UI_PASS=<UI_PASS> \
 -e RTSP_USERNAME=<RTSP_USERNAME> -e RTSP_PASSWORD=<RTSP_PASSWORD> \
-bambu_p1_streamer
+p1stream
 ```
 Port: 1984 Basic API UI
 Port: 8554 for RTSP Stream
