@@ -1,0 +1,36 @@
+# Update packages and install necessary dependencies
+FROM --platform=linux/arm64 homeassistant/aarch64-base-python:latest AS base-arm64
+RUN apk update && apk add wget curl
+RUN mkdir -p /app
+RUN VER=$(curl --silent -qI https://github.com/AlexxIT/go2rtc/releases/latest | awk -F '/' '/^location/ {print  substr($NF, 1, length($NF)-1)}') ;\
+    wget -P /app -q https://github.com/AlexxIT/go2rtc/releases/download/$VER/go2rtc_linux_arm64 ; \
+    mv /app/go2rtc_linux_arm64 /app/go2rtc ; \
+    chmod a+x /app/go2rtc
+	
+# Create a final stage for combining architectures
+FROM scratch as final
+COPY --from=base-arm64 / /
+
+# Set environment variables if needed
+ENV PRINTER_ADDRESS=
+ENV PRINTER_ACCESS_CODE=
+ENV UI_USERNAME=
+ENV UI_PASSWORD=
+ENV RTSP_USERNAME=
+ENV RTSP_PASSWORD=
+
+COPY p1.py run.sh go2rtc.yaml /app/
+# Set working directory
+WORKDIR /app
+
+# Entrypoint or CMD instructions
+RUN chmod a+x /app/run.sh /app/*
+ENTRYPOINT [ "/app/run.sh" ]
+
+HEALTHCHECK \
+    CMD curl --fail http://127.0.0.1:1984/ || exit 1
+
+LABEL \
+  io.hass.version="1.0.1" \
+  io.hass.type="addon" \
+  io.hass.arch="aarch64|amd64"

@@ -11,5 +11,7 @@ RTSP_USERNAME="$(bashio::config 'RTSP_USERNAME')"
 RTSP_PASSWORD="$(bashio::config 'RTSP_PASSWORD')"
 
 bashio::log.info 'Start go2rtc'
+bashio::log.info $(bashio::info.hostname)
+bashio::log.info $(bashio::info.arch)
 ./go2rtc
 bashio::log.info 'Stop go2rtc'

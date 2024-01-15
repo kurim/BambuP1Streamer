@@ -1,24 +1,15 @@
 # Update packages and install necessary dependencies
-FROM --platform=$BUILDPLATFORM homeassistant/amd64-base-python:latest AS base-amd64
+FROM --platform=linux/amd64 homeassistant/amd64-base-python:latest AS base-amd64
 RUN apk update && apk add wget curl
 RUN mkdir -p /app
 RUN VER=$(curl --silent -qI https://github.com/AlexxIT/go2rtc/releases/latest | awk -F '/' '/^location/ {print  substr($NF, 1, length($NF)-1)}') ;\
     wget -P /app -q https://github.com/AlexxIT/go2rtc/releases/download/$VER/go2rtc_linux_amd64 ; \
     mv /app/go2rtc_linux_amd64 /app/go2rtc ; \
     chmod a+x /app/go2rtc
-
-FROM --platform=$BUILDPLATFORM homeassistant/aarch64-base-python:latest AS base-arm64
-RUN apk update && apk add wget curl
-RUN mkdir -p /app
-RUN VER=$(curl --silent -qI https://github.com/AlexxIT/go2rtc/releases/latest | awk -F '/' '/^location/ {print  substr($NF, 1, length($NF)-1)}') ;\
-    wget -P /app -q https://github.com/AlexxIT/go2rtc/releases/download/$VER/go2rtc_linux_arm64 ; \
-    mv /app/go2rtc_linux_arm64 /app/go2rtc ; \
-    chmod a+x /app/go2rtc
-
+	
 # Create a final stage for combining architectures
 FROM scratch as final
 COPY --from=base-amd64 / /
-COPY --from=base-arm64 / /
 
 # Set environment variables if needed
 ENV PRINTER_ADDRESS=
@@ -27,10 +18,6 @@ ENV UI_USERNAME=
 ENV UI_PASSWORD=
 ENV RTSP_USERNAME=
 ENV RTSP_PASSWORD=
-
-# Expose necessary ports
-EXPOSE 8554
-EXPOSE 1984
 
 COPY p1.py run.sh go2rtc.yaml /app/
 # Set working directory
@@ -44,6 +31,6 @@ HEALTHCHECK \
     CMD curl --fail http://127.0.0.1:1984/ || exit 1
 
 LABEL \
-  io.hass.version="1.0.3" \
+  io.hass.version="1.0.1" \
   io.hass.type="addon" \
   io.hass.arch="aarch64|amd64"
